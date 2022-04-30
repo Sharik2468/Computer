@@ -1,25 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class PCBuild : MonoBehaviour
+public class PCBuild : MonoBehaviour, IPointerClickHandler
 {
-
     public Button VideoCardBtn;
     public GameObject VideoCard;
+    int VCE = 0;
     public Button ProcessorBtn;
     public GameObject Processor;
+    int PE = 0;
     public Button CoolerBtn;
     public GameObject Cooler;
+    int CE = 0;
     public Button PUBtn;
     public GameObject PU;
+    int PUE = 0;
     public Button RAMBtn;
     public GameObject RAM1;
+    int RAM1E = 0;
     public GameObject RAM2;
+    int RAM2E = 0;
     public Button MBBtn;
     public GameObject MB;
-    int Score = 0;
+    int MBE = 0;//чётные - вставлено
+
 
     // Start is called before the first frame update
     void Start()
@@ -31,91 +38,136 @@ public class PCBuild : MonoBehaviour
         RAMBtn.onClick.AddListener(RAMFunc);
         RAMBtn.onClick.AddListener(RAM1Func);
         MBBtn.onClick.AddListener(MBFunc);
+        PU.GetComponent<Button>().onClick.AddListener(PUFunc);
+        Cooler.GetComponent<Button>().onClick.AddListener(CoolerFunc);
+        VideoCard.GetComponent<Button>().onClick.AddListener(VideoCardInFunc);
+        Processor.GetComponent<Button>().onClick.AddListener(ProcessorFunc);
+        RAM1.GetComponent<Button>().onClick.AddListener(RAMFunc);
+        RAM2.GetComponent<Button>().onClick.AddListener(RAM1Func);
+        MB.GetComponent<Button>().onClick.AddListener(MBFunc);
+
+        ProcessorBtn.enabled = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (CE % 2 == 0)
+            ProcessorBtn.enabled = false;
+        else
+            ProcessorBtn.enabled = true;
+
+        if (VCE % 2 == 0 && //
+            PE % 2 == 0 && //
+            CE % 2 == 0 &&//
+            PUE % 2 == 0 &&//
+            RAM1E % 2 == 0 &&//
+            RAM2E % 2 == 0)
+            MBBtn.enabled = false;
+        else
+            MBBtn.enabled = true;
+
+        if(MBE%2==0)
+        {
+            VideoCardBtn.enabled = true;
+            ProcessorBtn.enabled = true;
+            CoolerBtn.enabled = true;
+            PUBtn.enabled = true;
+            RAMBtn.enabled = true;
+        }
+        else 
+        {
+            VideoCardBtn.enabled = false;
+            ProcessorBtn.enabled = false;
+            CoolerBtn.enabled = false;
+            PUBtn.enabled = false;
+            RAMBtn.enabled = false;
+        }
     }
 
     void VideoCardInFunc()
     {
-        Animator m_Animator = VideoCard.GetComponent<Animator>();
-        Debug.Log("You have clicked the button!");
-        //VideoCardInAnim.Play("Base Layer.VideoCardIn");
-       // m_Animator.SetFloat("Speed", 1);
-        if (Score % 2 == 0)
-            //m_Animator.Play("Base Layer.OUT", 0, 0.25f);
+        if (MBE % 2 == 0)
+        {
+            Animator m_Animator = VideoCard.GetComponent<Animator>();
+            Debug.Log("You have clicked the button!");
             m_Animator.SetTrigger("ButtonClick");
-        else
-            //m_Animator.Play("Base Layer.VCIN", 0, 0.25f);
-            m_Animator.SetTrigger("ButtonClick");
-        Score++;
+            VCE++;
+        }
     }
 
     void ProcessorFunc()
     {
-        Animator m_Animator = Processor.GetComponent<Animator>();
-        Debug.Log("You have clicked the button!");
-        if (Score % 2 == 0)
+        if (CE % 2 != 0 && MBE%2==0)
+        {
+            Animator m_Animator = Processor.GetComponent<Animator>();
+            Debug.Log("You have clicked the button!");
             m_Animator.SetTrigger("ButtonClick");
-        else
-            m_Animator.SetTrigger("ButtonClick");
-        Score++;
+            PE++;
+        }
     }
 
     void CoolerFunc()
     {
-        Animator m_Animator = Cooler.GetComponent<Animator>();
-        Debug.Log("You have clicked the button!");
-        if (Score % 2 == 0)
+        if (MBE % 2 == 0)
+        {
+            Animator m_Animator = Cooler.GetComponent<Animator>();
+            Debug.Log("You have clicked the button!");
             m_Animator.SetTrigger("ButtonClick");
-        else
-            m_Animator.SetTrigger("ButtonClick");
-        Score++;
+            CE++;
+        }
     }
 
     void PUFunc()
     {
-        Animator m_Animator = PU.GetComponent<Animator>();
-        Debug.Log("You have clicked the button!");
-        if (Score % 2 == 0)
+        if (MBE % 2 == 0)
+        {
+            Animator m_Animator = PU.GetComponent<Animator>();
+            Debug.Log("You have clicked the button!");
             m_Animator.SetTrigger("ButtonClick");
-        else
-            m_Animator.SetTrigger("ButtonClick");
-        Score++;
+            PUE++;
+        }
     }
     void RAMFunc()
     {
-        Animator m_Animator = RAM1.GetComponent<Animator>();
-        Debug.Log("You have clicked the button!");
-        if (Score % 2 == 0)
+        if (MBE % 2 == 0)
+        {
+            Animator m_Animator = RAM1.GetComponent<Animator>();
+            Debug.Log("You have clicked the button!");
             m_Animator.SetTrigger("ButtonClick");
-        else
-            m_Animator.SetTrigger("ButtonClick");
-        Score++;
+            RAM1E++;
+        }
     }
 
     void RAM1Func()
     {
-        Animator m_Animator = RAM2.GetComponent<Animator>();
-        Debug.Log("You have clicked the button!");
-        if (Score % 2 == 0)
+        if (MBE % 2 == 0)
+        {
+            Animator m_Animator = RAM2.GetComponent<Animator>();
+            Debug.Log("You have clicked the button!");
             m_Animator.SetTrigger("ButtonClick");
-        else
-            m_Animator.SetTrigger("ButtonClick");
-        Score++;
+            RAM2E++;
+        }
     }
 
     void MBFunc()
     {
-        Animator m_Animator = MB.GetComponent<Animator>();
-        Debug.Log("You have clicked the button!");
-        if (Score % 2 == 0)
+        if (VCE % 2 != 0 && //
+            PE % 2 != 0 && //
+            CE % 2 != 0 &&//
+            PUE % 2 != 0 &&//
+            RAM1E % 2 != 0 &&//
+            RAM2E % 2 != 0)
+        {
+            Animator m_Animator = MB.GetComponent<Animator>();
+            Debug.Log("You have clicked the button!");
             m_Animator.SetTrigger("ButtonClick");
-        else
-            m_Animator.SetTrigger("ButtonClick");
-        Score++;
+            MBE++;
+        }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        Debug.Log("Click Received");
     }
 }
